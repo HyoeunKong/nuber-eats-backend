@@ -2,9 +2,15 @@
 
 The Backend of Nuber Eats Clone
 
-## set up
-1. 프로젝트 생성
+## Set Up
 
 ```bash
 nest g application
+```
+
+## Graphql API
+패키지 설치
+
+```bash
+npm i @nestjs/graphql graphql-tools graphql apollo-server-express
 ```
