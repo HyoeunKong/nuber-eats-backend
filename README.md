@@ -63,3 +63,27 @@ npm i joi
 ## synchronize option in TypeOrmModule 
 true 일 경우 TypeORM이 Entity를 찾고 알아서 migration 해줌
 DB 구성을 자동으로 바꿔줌
+
+## TypeOrmModule Repository
+Typescript를 이용해서  DB에 있는 table 에 접근
+
+### Activate Record vs Data Mapper
+DB랑 상호작용할 때 쓰는 패턴
+
+### Active Record
+```typescript
+export class Restaurant extends BaseEntity
+```
+- 소규모 앱에서 단순하게 사용할 수 있도록 함
+
+### Data Mapper
+- Repository 를 사용함
+- Repository : Entity와 상호작용 담당
+- Entity랑 실제로 상호작용하는 Repository만 추가적으로 필요함.
+- 유지 관리하는걸 도와주고 대규모 앱에서 유용
+- 노마드 프로젝트에서 Data Mapper 을 쓰는 이유 : NestJS + TypeORM 개발환경에서 Repository를 사용하는 모듈을 쓸 수 있다.
+- Repository 를 사용하면 어디서든지 접근가능(실제로 구현하는 서비스에서 접근이 가능하고 테스팅할 때도 접근 가능)
+
+## Mapped Types
+base type을 바탕으로 다른 버전들을 만들 수 있게 해줌
+entity 파일에서 graphQL schma, dto, DB table 을 모두 만들 수 있음
