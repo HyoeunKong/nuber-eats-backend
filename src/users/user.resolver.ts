@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { truncate } from 'fs';
 import { boolean } from 'joi';
 import {
   CreateAccountInput,
@@ -17,5 +18,22 @@ export class UsersResolver {
   }
 
   @Mutation((returns) => CreateAccountOuput)
-  createAccount(@Args('input') createAccountInput: CreateAccountInput) {}
+  async createAccount(
+    @Args('input') createAccountInput: CreateAccountInput,
+  ): Promise<CreateAccountOuput> {
+    try {
+      const [ok, error] = await this.usersService.createAccount(
+        createAccountInput,
+      );
+      return {
+        ok,
+        error,
+      };
+    } catch (error) {
+      return {
+        error,
+        ok: false,
+      };
+    }
+  }
 }

@@ -10,18 +10,22 @@ export class UsersService {
     @InjectRepository(User) private readonly users: Repository<User>,
   ) {}
 
-  async createAccount({ email, password, role }: CreateAccountInput) {
+  async createAccount({
+    email,
+    password,
+    role,
+  }: CreateAccountInput): Promise<[boolean, string?]> {
     try {
       const exists = await this.users.findOne({ email });
       if (exists) {
         //make error
-        return;
+        return [false, 'There is a user with that email elready'];
       }
       await this.users.save(this.users.create({ email, password, role }));
-      return true;
+      return [true];
     } catch (e) {
       //make error
-      return;
+      return [false, "Couldn't crate account"];
     }
     //check new user
 

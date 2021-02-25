@@ -87,3 +87,22 @@ export class Restaurant extends BaseEntity
 ## Mapped Types
 base type을 바탕으로 다른 버전들을 만들 수 있게 해줌
 entity 파일에서 graphQL schma, dto, DB table 을 모두 만들 수 있음
+
+## Password Hash
+DB에 password를 저장할떄는 꼭 단방향 으로 해싱해 주어야함.
+
+### listener
+entity에 무슨 일이 생길 때 실행됨
+
+Any of your entities can have methods with custom logic
+that listen to specific entity events.
+
+@AfterLoad(), @BeforeInsert.. 등등
+
+###Bcrpyt
+hash 하고 hash를 확인하는 데도 사용
+
+```bash
+npm i bcrypt
+npm i @types/bcrypt --dev-only
+```
