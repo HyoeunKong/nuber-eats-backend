@@ -9,6 +9,7 @@ import { Restaurant } from './restaurants/entities/restaurant.entity';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
+import { JwtModule } from './jwt/jwt.module';
 console.log(process.env.DB_USERNAME);
 @Module({
   imports: [
@@ -22,6 +23,7 @@ console.log(process.env.DB_USERNAME);
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
+        SECRET_KEY: Joi.required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -40,6 +42,7 @@ console.log(process.env.DB_USERNAME);
     }),
     UsersModule,
     CommonModule,
+    JwtModule,
   ],
   controllers: [],
   providers: [],
