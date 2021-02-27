@@ -106,3 +106,23 @@ hash 하고 hash를 확인하는 데도 사용
 npm i bcrypt
 npm i @types/bcrypt --dev-only
 ```
+
+## JWT 모듈 직접 구현 하기
+```bash
+npm i jsonwebtoken
+npm i @types/jsonwebtoken --only-dev
+```
+
+privateKey: token을 지정하기 위해 사용
+
+PrivateKey를 이용해서 token을 지정해 주는 목적
+- token을 수정했는지  확인가능
+- 사용자가 정보를 수정하면 수정된 정보를 인지 할 수 있음
+
+token을 user에게 지정해주면
+사용자는 token에 뭐가들어있는지 알 수 있음
+token에 중요한 정보 넣으면 안됨(아이디 정도)
+jwt의 목적은 보안이 아님 
+json web token을 이용해서 우리만이 유효한 인증을 할 수 있게 함
+내부에 담겨진 정보 자체가 아닌, 정보의 진위 여부가 중요하다.
+토큰이 우리의 것인지, 아무도 수정하지 않았는지가 중요함
