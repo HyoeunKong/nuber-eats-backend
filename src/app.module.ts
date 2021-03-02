@@ -23,7 +23,7 @@ console.log(process.env.DB_USERNAME);
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
-        SECRET_KEY: Joi.required(),
+        PRIVATE_KEY: Joi.required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -42,7 +42,9 @@ console.log(process.env.DB_USERNAME);
     }),
     UsersModule,
     CommonModule,
-    JwtModule,
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
+    }),
   ],
   controllers: [],
   providers: [],

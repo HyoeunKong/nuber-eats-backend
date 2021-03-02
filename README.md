@@ -126,3 +126,19 @@ jwt의 목적은 보안이 아님
 json web token을 이용해서 우리만이 유효한 인증을 할 수 있게 함
 내부에 담겨진 정보 자체가 아닌, 정보의 진위 여부가 중요하다.
 토큰이 우리의 것인지, 아무도 수정하지 않았는지가 중요함
+
+### Global Module 만들기
+@Global() 데코레이터를 붙여주면됨!
+모듈마다 일일히 import하지 않고 app에만 import 해줘도됨
+
+### Module 에 config 추가
+1. jwt > interfaces 폴더 생성
+2. JwtModuleOptions 작성
+3. forRoot에 옵션 추가해줌
+```typescript
+ JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY,
+    }),
+```
+
+### option을 JwtService 로 내보내는 법
