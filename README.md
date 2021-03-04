@@ -54,7 +54,7 @@ cross-env 가상 변수를 설정할 수 있도록 함
 환경변수 유효성 검사
 환경변수 유효성 검사를 해서 환경변수들이 준비 되지 않으면 앱이 실행되지 않도록 한다.
 
-###joi
+#### joi
 데이터 유효성 검사 툴
 ```bash
 npm i joi
@@ -67,16 +67,16 @@ DB 구성을 자동으로 바꿔줌
 ## TypeOrmModule Repository
 Typescript를 이용해서  DB에 있는 table 에 접근
 
-### Activate Record vs Data Mapper
+#### Activate Record vs Data Mapper
 DB랑 상호작용할 때 쓰는 패턴
 
-### Active Record
+#### Active Record
 ```typescript
 export class Restaurant extends BaseEntity
 ```
 - 소규모 앱에서 단순하게 사용할 수 있도록 함
 
-### Data Mapper
+#### Data Mapper
 - Repository 를 사용함
 - Repository : Entity와 상호작용 담당
 - Entity랑 실제로 상호작용하는 Repository만 추가적으로 필요함.
@@ -127,11 +127,11 @@ json web token을 이용해서 우리만이 유효한 인증을 할 수 있게 �
 내부에 담겨진 정보 자체가 아닌, 정보의 진위 여부가 중요하다.
 토큰이 우리의 것인지, 아무도 수정하지 않았는지가 중요함
 
-### Global Module 만들기
+#### Global Module 만들기
 @Global() 데코레이터를 붙여주면됨!
 모듈마다 일일히 import하지 않고 app에만 import 해줘도됨
 
-### Module 에 config 추가
+#### Module 에 config 추가
 1. jwt > interfaces 폴더 생성
 2. JwtModuleOptions 작성
 3. forRoot에 옵션 추가해줌
@@ -141,4 +141,4 @@ json web token을 이용해서 우리만이 유효한 인증을 할 수 있게 �
     }),
 ```
 
-### option을 JwtService 로 내보내는 법
+#### option을 JwtService 로 내보내는 법
