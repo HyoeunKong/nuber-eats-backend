@@ -141,4 +141,67 @@ json web token을 이용해서 우리만이 유효한 인증을 할 수 있게 �
     }),
 ```
 
-#### option을 JwtService 로 내보내는 법
+#### http request 를 resolver로  가져오기
+```typescript
+
+...
+
+@Injectable()
+export class JwtMiddleware implements NestMiddleware {
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly userService: UsersService,
+  ) {}
+  async use(req: Request, res: Response, next: NextFunction) {
+    if ('x-jwt' in req.headers) {
+      const token = req.headers['x-jwt'];
+      const decoded = this.jwtService.verify(token.toString());
+      console.log(decoded);
+      if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
+        try {
+          const user = await this.userService.findById(decoded['id']);
+          req['user'] = user;
+        } catch (e) {}
+      }
+    }
+    next();
+  }
+}
+
+```
+1. apollo server의 context 사용
+- request context 는 각 request에서 사용이 가능
+- contest가 함수로 정의되면 매 request 마다 호출됨 이것은 req property를 포함한 object를 Express로 부터 받는다.
+- context에  property를 넣으면 resolver 안에서 사용할  수 있다.
+
+정리🍺
+1. token을 request header에 붙여서 보냄
+2. JwtMiddleware가 request를 먼저 받음
+3. JwtMiddleware가 token으로 id를 찾고 id로 user를 찾아서 request user 를 request에 넣어줌(request안에 새로운걸 넣어준거임)
+4. request가 GraphQLModule로 와서 context안으로 들어감
+5. resolver가 context에 접근할 수 있음
+
+### Guard
+request를 다음 단계로  진행할지  말지 결정함
+
+```bash
+nest  g mo auth
+```
+
+```typescript
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(context: ExecutionContext) {
+    const gqlContext = GqlExecutionContext.create(context).getContext();
+    const user = gqlContext['user'];
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+}
+
+
+```
+ canActivate() : true를 리턴하면 request를 진행시키고 false를 리턴하면 request를 멈춤
+  const gqlContext = GqlExecutionContext.create(context).getContext() : http 요청을 graphQL 형태로 바꿔줌
