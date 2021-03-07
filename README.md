@@ -203,5 +203,10 @@ export class AuthGuard implements CanActivate {
 
 
 ```
- canActivate() : true를 리턴하면 request를 진행시키고 false를 리턴하면 request를 멈춤
-  const gqlContext = GqlExecutionContext.create(context).getContext() : http 요청을 graphQL 형태로 바꿔줌
+canActivate() : true를 리턴하면 request를 진행시키고 false를 리턴하면 request를 멈춤
+const gqlContext = GqlExecutionContext.create(context).getContext() : http 요청을 graphQL 형태로 바꿔줌
+
+#### authentication vs authorization
+
+authentication: 누가 자원을 요청하는지 확인하는 과정
+authorization: user가 어떤 일을 하기 전에 permission을 가지고 있는지 확인하는 과정
