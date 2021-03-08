@@ -54,12 +54,12 @@ export class UsersResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Query((returs) => UserProfileOutput)
+  @Query((returns) => UserProfileOutput)
   async useProfile(
-    @Args() UserProfileInput: UserProfileInput,
+    @Args() userProfileInput: UserProfileInput,
   ): Promise<UserProfileOutput> {
     try {
-      const user = await this.usersService.findById(UserProfileInput.userId);
+      const user = await this.usersService.findById(userProfileInput.userId);
       if (!user) {
         throw Error();
       }

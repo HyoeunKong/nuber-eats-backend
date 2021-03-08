@@ -82,7 +82,7 @@ export class UsersService {
     if (password) {
       user.password = password;
     }
-    console.log(user.password, 'dsfdfdfsdffsd');
+
     const updatedUser = await this.users.save(user);
     return updatedUser;
   }
