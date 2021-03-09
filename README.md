@@ -210,3 +210,13 @@ const gqlContext = GqlExecutionContext.create(context).getContext() : http 요�
 
 authentication: 누가 자원을 요청하는지 확인하는 과정
 authorization: user가 어떤 일을 하기 전에 permission을 가지고 있는지 확인하는 과정
+
+## 데이터 베이스 관계
+
+### One-to-one
+- A가 오로지 하나의 B만 포함한다.
+- B도 오로지 하나의 A만 포함한다.
+- ex) Verification Entity가 오직 한명의 User만 가질 수 있다. 
+  User도 마찬가지로 오직 하나의 Verification만 가질 수 있다.
+- 그다지 많지 않음 대부분 One-to-many(한명의 User는 여러개의 restaurants를 가짐) 나 Many-to-one
+- 
