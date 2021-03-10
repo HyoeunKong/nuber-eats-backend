@@ -99,4 +99,12 @@ export class UsersService {
     const updatedUser = await this.users.save(user);
     return updatedUser;
   }
+
+  async verifyEmail(code: string): Promise<boolean> {
+    const verification = await this.verifications.findOne({ code });
+    if (verification) {
+      console.log(verification, verification.user);
+    }
+    return false;
+  }
 }
