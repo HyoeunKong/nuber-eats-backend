@@ -101,9 +101,14 @@ export class UsersService {
   }
 
   async verifyEmail(code: string): Promise<boolean> {
-    const verification = await this.verifications.findOne({ code });
+    const verification = await this.verifications.findOne(
+      { code },
+      // { loadRelationIds: true },
+      { relations: ['user'] },
+    );
     if (verification) {
-      console.log(verification, verification.user);
+      verification.user.verified = true;
+      this.users.save(verification.user);
     }
     return false;
   }

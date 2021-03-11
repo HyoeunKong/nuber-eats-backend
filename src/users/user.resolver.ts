@@ -12,7 +12,7 @@ import { UserProfileInput, UserProfileOutput } from './dtos/user-profile.dto';
 import {
   VerificationEmailInput,
   VerificationEmailOutput,
-} from './dtos/user-verification.dto';
+} from './dtos/verification.dto';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
