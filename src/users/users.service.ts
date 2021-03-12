@@ -52,7 +52,10 @@ export class UsersService {
 
   async login({ email, password }: LoginInput): Promise<LoginOutput> {
     try {
-      const user = await this.users.findOne({ email });
+      const user = await this.users.findOne(
+        { email },
+        { select: ['id', 'password'] },
+      );
       if (!user) {
         return {
           ok: false,
@@ -87,29 +90,44 @@ export class UsersService {
     { email, password }: EditProfileInput,
   ): Promise<User> {
     const user = await this.users.findOne(userId);
-    if (email) {
-      user.email = email;
-      user.verified = false;
-      await this.verifications.save(this.verifications.create({ user }));
-    }
-    if (password) {
-      user.password = password;
-    }
+    console.log(userId, user, email);
+    try {
+      if (email) {
+        user.email = email;
+        user.verified = false;
+        console.log(this.verifications.create({ user }), 'ddd');
 
-    const updatedUser = await this.users.save(user);
-    return updatedUser;
+        await this.verifications.save(this.verifications.create({ user }));
+      }
+      if (password) {
+        user.password = password;
+      }
+
+      const updatedUser = await this.users.save(user);
+      return updatedUser;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async verifyEmail(code: string): Promise<boolean> {
-    const verification = await this.verifications.findOne(
-      { code },
-      // { loadRelationIds: true },
-      { relations: ['user'] },
-    );
-    if (verification) {
-      verification.user.verified = true;
-      this.users.save(verification.user);
+    try {
+      const verification = await this.verifications.findOne(
+        { code },
+        // { loadRelationIds: true },
+        { relations: ['user'] },
+      );
+      if (verification) {
+        verification.user.verified = true;
+        console.log(verification.user);
+
+        this.users.save(verification.user);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
-    return false;
   }
 }
