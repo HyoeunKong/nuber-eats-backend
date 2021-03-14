@@ -2,13 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as jwt from 'jsonwebtoken';
-import { CreateAccountInput } from './dtos/create-account.dto';
+import {
+  CreateAccountInput,
+  CreateAccountOuput,
+} from './dtos/create-account.dto';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { User } from './entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from 'src/jwt/jwt.service';
-import { EditProfileInput } from './dtos/edit-profile.dto';
+import { EditProfileInput, EditProfileOutput } from './dtos/edit-profile.dto';
 import { Verification } from './entities/verification.entity';
+import { UserProfileOutput } from './dtos/user-profile.dto';
+import { VerificationEmailOutput } from './dtos/verification.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +21,6 @@ export class UsersService {
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Verification)
     private readonly verifications: Repository<Verification>,
-
     private readonly jwtService: JwtService,
   ) {}
 
@@ -24,18 +28,15 @@ export class UsersService {
     email,
     password,
     role,
-  }: CreateAccountInput): Promise<{ ok: boolean; error?: string }> {
+  }: CreateAccountInput): Promise<CreateAccountOuput> {
     try {
       const exists = await this.users.findOne({ email });
       if (exists) {
-        //make error
         return { ok: false, error: 'There is a user with that email elready' };
       }
-
       const user = await this.users.save(
         this.users.create({ email, password, role }),
       );
-
       await this.verifications.save(
         this.verifications.create({
           user,
@@ -56,12 +57,14 @@ export class UsersService {
         { email },
         { select: ['id', 'password'] },
       );
+
       if (!user) {
         return {
           ok: false,
           error: 'User not found',
         };
       }
+
       const correctUser = await user.checkPassword(password);
       if (!correctUser) {
         return {
@@ -81,36 +84,59 @@ export class UsersService {
       };
     }
   }
-  async findById(id: number): Promise<User> {
-    return this.users.findOne({ id });
+  async findById(id: number): Promise<UserProfileOutput> {
+    try {
+      const user = await this.users.findOne({ id });
+
+      if (!user) {
+        throw Error();
+      }
+      return {
+        ok: true,
+        user,
+      };
+    } catch (err) {
+      return {
+        error: 'User Not Found',
+        ok: false,
+      };
+    }
   }
 
   async editProfile(
     userId: number,
     { email, password }: EditProfileInput,
-  ): Promise<User> {
-    const user = await this.users.findOne(userId);
-    console.log(userId, user, email);
+  ): Promise<EditProfileOutput> {
     try {
+      const user = await this.users.findOne(userId);
+
       if (email) {
         user.email = email;
         user.verified = false;
-        console.log(this.verifications.create({ user }), 'ddd');
-
         await this.verifications.save(this.verifications.create({ user }));
       }
       if (password) {
         user.password = password;
       }
-
       const updatedUser = await this.users.save(user);
-      return updatedUser;
+      if (updatedUser) {
+        return {
+          ok: true,
+        };
+      }
+      return {
+        ok: false,
+        error: '업데이트에 실패했습니다.',
+      };
     } catch (error) {
-      console.log(error);
+      return {
+        ok: false,
+        error,
+      };
     }
   }
 
-  async verifyEmail(code: string): Promise<boolean> {
+  async verifyEmail(code: string): Promise<VerificationEmailOutput> {
     try {
       const verification = await this.verifications.findOne(
         { code },
@@ -119,15 +145,19 @@ export class UsersService {
       );
       if (verification) {
         verification.user.verified = true;
-        console.log(verification.user);
+        await this.users.save(verification.user);
+        await this.verifications.delete(verification.id);
 
-        this.users.save(verification.user);
-        return true;
+        return {
+          ok: true,
+        };
       }
-      return false;
-    } catch (e) {
-      console.log(e);
-      return false;
+      return { ok: false, error: 'Verification not found.' };
+    } catch (error) {
+      return {
+        ok: false,
+        error,
+      };
     }
   }
 }

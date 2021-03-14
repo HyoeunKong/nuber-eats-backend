@@ -219,4 +219,7 @@ authorization: user가 어떤 일을 하기 전에 permission을 가지고 있�
 - ex) Verification Entity가 오직 한명의 User만 가질 수 있다. 
   User도 마찬가지로 오직 하나의 Verification만 가질 수 있다.
 - 그다지 많지 않음 대부분 One-to-many(한명의 User는 여러개의 restaurants를 가짐) 나 Many-to-one
-- 
+
+
+## email 모듈 만들기
+1. email 모듈을 먼저 만들어서 유저 인증을 한다.
