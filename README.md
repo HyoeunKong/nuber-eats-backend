@@ -121,7 +121,7 @@ PrivateKey를 이용해서 token을 지정해 주는 목적
 
 token을 user에게 지정해주면
 사용자는 token에 뭐가들어있는지 알 수 있음
-token에 중요한 정보 넣으면 안됨(아이디 정도)
+token에 중요한 정보 넣으면 안됨(아이디(:id) 정도)
 jwt의 목적은 보안이 아님 
 json web token을 이용해서 우리만이 유효한 인증을 할 수 있게 함
 내부에 담겨진 정보 자체가 아닌, 정보의 진위 여부가 중요하다.
@@ -171,7 +171,7 @@ export class JwtMiddleware implements NestMiddleware {
 ```
 1. apollo server의 context 사용
 - request context 는 각 request에서 사용이 가능
-- contest가 함수로 정의되면 매 request 마다 호출됨 이것은 req property를 포함한 object를 Express로 부터 받는다.
+- context가 함수로 정의되면 매 request 마다 호출됨 이것은 req property를 포함한 object를 Express로 부터 받는다.
 - context에  property를 넣으면 resolver 안에서 사용할  수 있다.
 
 정리🍺
