@@ -80,10 +80,10 @@ export class UsersService {
         ok: true,
         token,
       };
-    } catch (err) {
+    } catch (error) {
       return {
         ok: false,
-        error: err,
+        error: error,
       };
     }
   }

@@ -221,5 +221,45 @@ authorization: user가 어떤 일을 하기 전에 permission을 가지고 있�
 - 그다지 많지 않음 대부분 One-to-many(한명의 User는 여러개의 restaurants를 가짐) 나 Many-to-one
 
 
-## email 모듈 만들기
-1. email 모듈을 먼저 만들어서 유저 인증을 한다.
+## Testing
+
+###1. unit test
+
+#### users 폴더에 user.service.spec.ts 파일을 만든다.
+- spec 은 필수 임!
+- createAccount, login, findById, editProfile,verifyEmail test 하기
+
+
+####  NestJS는 테스트 패키지를 가지고 있음! userService을 가진 독립적인 테스트 모둘을 만들어야함
+
+```typescript
+import  {Text}  from "@nestjs/testing";
+import {UserService} from "./users.service";
+
+describe("UserService", () => {
+  
+let service:UserService;
+beforeAll(async () => {
+  const module = await Test.createTestingModule({
+    providers:[UserService],
+  }).compile();
+
+  service = module.get<UserService>(UserService);
+})
+// test module 생성
+
+it("Should be defined", () => {
+  expect(service).toBeDefined();
+});
+
+it.todo("createAccount");
+it.todo("login");
+it.todo("findById");
+it.todo("editProfile");
+it.todo("verifyEmail");
+
+})
+```
+- 테스트를 독립시킨다.
+- 유저 서비스를 독립시킨다.
+- graphQL resolver와 독립시켜 테스트한다.
