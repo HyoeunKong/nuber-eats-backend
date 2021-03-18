@@ -33,6 +33,7 @@ export class UsersService {
   }: CreateAccountInput): Promise<CreateAccountOuput> {
     try {
       const exists = await this.users.findOne({ email });
+
       if (exists) {
         return { ok: false, error: 'There is a user with that email elready' };
       }
