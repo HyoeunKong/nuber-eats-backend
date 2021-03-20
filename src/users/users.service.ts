@@ -45,7 +45,9 @@ export class UsersService {
           user,
         }),
       );
-      this.mailService.sendVerificatinoEmail(user.email, verification.code);
+
+      console.log(user.email, verification.code);
+      this.mailService.sendVerificationEmail(user.email, verification.code);
       return { ok: true };
     } catch (e) {
       //make error

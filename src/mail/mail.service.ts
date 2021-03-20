@@ -41,7 +41,7 @@ export class MailService {
     }
   }
 
-  sendVerificatinoEmail(email: string, code: string) {
+  sendVerificationEmail(email: string, code: string) {
     this.sendEmail('Verify Your Email', 'verify-email', [
       { key: 'code', value: code },
       { key: 'username', value: email },
