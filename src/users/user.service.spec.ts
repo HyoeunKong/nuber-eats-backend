@@ -15,14 +15,14 @@ const mockRepository = () => ({
   create: jest.fn(),
 });
 
-const mockJwtService = {
+const mockJwtService = () => ({
   sign: jest.fn(() => 'signed-token-baby'),
   verify: jest.fn(),
-};
+});
 
-const mockMailService = {
+const mockMailService = () => ({
   sendVerificationEmail: jest.fn(),
-};
+});
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 
@@ -47,11 +47,11 @@ describe('UserService', () => {
         },
         {
           provide: JwtService,
-          useValue: mockJwtService,
+          useValue: mockJwtService(),
         },
         {
           provide: MailService,
-          useValue: mockMailService,
+          useValue: mockMailService(),
         },
       ],
     }).compile();
@@ -250,6 +250,41 @@ describe('UserService', () => {
         newUser.email,
         newVerification.code,
       );
+    });
+    it('should change password', async () => {
+      const oldUser = {
+        password: 'old',
+      };
+      const editProfileArgs = {
+        userId: 1,
+        input: { password: '1111' },
+      };
+
+      usersRepository.findOne.mockResolvedValue(oldUser);
+      usersRepository.save.mockResolvedValue({ password: '1111' });
+      const result = await service.editProfile(
+        editProfileArgs.userId,
+        editProfileArgs.input,
+      );
+      expect(usersRepository.save).toHaveBeenCalledTimes(1);
+      expect(usersRepository.save).toHaveBeenCalledWith({ password: '1111' });
+      expect(result).toEqual({ ok: true });
+    });
+
+    it('should fail on exception', async () => {
+      const editProfileArgs = {
+        userId: 1,
+        input: { password: '1111' },
+      };
+      usersRepository.findOne.mockRejectedValue(new Error());
+      const result = await service.editProfile(
+        editProfileArgs.userId,
+        editProfileArgs.input,
+      );
+      expect(result).toEqual({
+        ok: false,
+        error: '에러가 발생했습니다.',
+      });
     });
   });
   it.todo('verifyEmail');

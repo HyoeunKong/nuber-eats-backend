@@ -125,6 +125,7 @@ export class UsersService {
       if (password) {
         user.password = password;
       }
+      console.log(user);
       const updatedUser = await this.users.save(user);
       if (updatedUser) {
         return {
@@ -138,7 +139,7 @@ export class UsersService {
     } catch (error) {
       return {
         ok: false,
-        error,
+        error: '에러가 발생했습니다.',
       };
     }
   }
