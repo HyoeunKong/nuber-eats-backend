@@ -55,5 +55,4 @@ describe('JwtService', () => {
       expect(jwt.verify).toHaveBeenCalledWith(TOKEN, TEST_KEY);
     });
   });
-  it.todo('verify');
 });

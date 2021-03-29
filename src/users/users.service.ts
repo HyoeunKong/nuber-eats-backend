@@ -139,7 +139,7 @@ export class UsersService {
     } catch (error) {
       return {
         ok: false,
-        error: '에러가 발생했습니다.',
+        error: 'Could not update',
       };
     }
   }

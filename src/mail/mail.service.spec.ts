@@ -35,5 +35,31 @@ describe('Mailervice', () => {
   });
 
   it.todo('sendEmail');
+
+  describe('sendVerificationEmail', () => {
+    it('should call sendEmail', () => {
+      const sendVerificationEmailArgs = {
+        email: 'email',
+        code: 'code',
+      };
+      jest.spyOn(service, 'sendEmail').mockImplementation(async () => {
+        console.log('I Love u');
+      });
+      service.sendVerificationEmail(
+        sendVerificationEmailArgs.email,
+        sendVerificationEmailArgs.code,
+      );
+
+      expect(service.sendEmail).toHaveBeenCalledTimes(1);
+      expect(service.sendEmail).toHaveBeenLastCalledWith(
+        'Verify Your Email',
+        'verify-email',
+        [
+          { key: 'code', value: sendVerificationEmailArgs.code },
+          { key: 'username', value: sendVerificationEmailArgs.email },
+        ],
+      );
+    });
+  });
   it.todo('sendVerificationEmail');
 });

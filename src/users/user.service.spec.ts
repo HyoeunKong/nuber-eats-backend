@@ -284,7 +284,7 @@ describe('UserService', () => {
       );
       expect(result).toEqual({
         ok: false,
-        error: 'Could not update ',
+        error: 'Could not update',
       });
     });
   });
