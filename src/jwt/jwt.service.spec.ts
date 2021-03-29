@@ -37,6 +37,7 @@ describe('JwtService', () => {
   it('be defined', () => {
     expect(service).toBeDefined();
   });
+
   describe('sign', () => {
     it('should return a signed token', () => {
       const token = service.sign(USER_ID);
@@ -45,6 +46,7 @@ describe('JwtService', () => {
       expect(jwt.sign).toHaveBeenCalledWith({ id: USER_ID }, TEST_KEY);
     });
   });
+
   describe('verify', () => {
     it('should return the decoded token', () => {
       const decodedToken = service.verify(TOKEN);
