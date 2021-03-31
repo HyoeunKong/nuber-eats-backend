@@ -4,12 +4,11 @@ import { MailService } from './mail.service';
 import got from 'got';
 import * as FormData from 'form-data';
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-jest.mock('got', () => {});
-jest.mock('form-data', () => {
-  return {
-    append: jest.fn(),
-  };
-});
+
+jest.mock('got');
+jest.mock('form-data');
+
+const TEST_DOMAIN = 'test_domain';
 
 describe('Mailervice', () => {
   let service: MailService;
@@ -21,7 +20,7 @@ describe('Mailervice', () => {
           provide: CONFIG_OPTIONS,
           useValue: {
             apiKey: 'test-apiKey',
-            domail: 'test-domain',
+            domain: TEST_DOMAIN,
             fromEmail: 'test-fromEmail',
           },
         },
@@ -43,7 +42,7 @@ describe('Mailervice', () => {
         code: 'code',
       };
       jest.spyOn(service, 'sendEmail').mockImplementation(async () => {
-        console.log('I Love u');
+        return true;
       });
       service.sendVerificationEmail(
         sendVerificationEmailArgs.email,
@@ -61,5 +60,27 @@ describe('Mailervice', () => {
       );
     });
   });
-  it.todo('sendVerificationEmail');
+  describe('sendEmail', () => {
+    it('sends email', async () => {
+      const ok = await service.sendEmail('', '', [{ key: 'one', value: '1' }]);
+      const formSpy = jest.spyOn(FormData.prototype, 'append');
+      console.log(formSpy, 'formSpy');
+      expect(formSpy).toHaveBeenCalled();
+      expect(got.post).toHaveBeenCalledTimes(1);
+      console.log(TEST_DOMAIN);
+      expect(got.post).toHaveBeenCalledWith(
+        `https://api.mailgun.net/v3/${TEST_DOMAIN}/messages`,
+        expect.any(Object),
+      );
+      expect(ok).toEqual(true);
+    });
+
+    it('fails on error', async () => {
+      jest.spyOn(got, 'post').mockImplementation(() => {
+        throw new Error();
+      });
+      const ok = await service.sendEmail('', '', []);
+      expect(ok).toEqual(false);
+    });
+  });
 });
