@@ -33,8 +33,6 @@ describe('Mailervice', () => {
     expect(service).toBeDefined();
   });
 
-  it.todo('sendEmail');
-
   describe('sendVerificationEmail', () => {
     it('should call sendEmail', () => {
       const sendVerificationEmailArgs = {
@@ -63,11 +61,11 @@ describe('Mailervice', () => {
   describe('sendEmail', () => {
     it('sends email', async () => {
       const ok = await service.sendEmail('', '', [{ key: 'one', value: '1' }]);
-      const formSpy = jest.spyOn(FormData.prototype, 'append');
-      console.log(formSpy, 'formSpy');
+      const formSpy = jest.spyOn(FormData.prototype, 'append'); //이부분잘 몰겠음
+
       expect(formSpy).toHaveBeenCalled();
       expect(got.post).toHaveBeenCalledTimes(1);
-      console.log(TEST_DOMAIN);
+
       expect(got.post).toHaveBeenCalledWith(
         `https://api.mailgun.net/v3/${TEST_DOMAIN}/messages`,
         expect.any(Object),

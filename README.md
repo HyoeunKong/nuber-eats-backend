@@ -265,4 +265,7 @@ it.todo("verifyEmail");
 - 유저 서비스를 독립시킨다.
 - graphQL resolver와 독립시켜 테스트한다.
 
-#### 외부 라이브러리를 mock하는 방법
+
+### END-TO-END
+
+- 기본적으로 Resolver 테스트
