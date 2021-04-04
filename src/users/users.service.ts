@@ -113,10 +113,18 @@ export class UsersService {
   ): Promise<EditProfileOutput> {
     try {
       const user = await this.users.findOne(userId);
-
       if (email) {
+        const exists = await this.users.findOne({ email });
+        if (exists) {
+          return {
+            ok: false,
+            error: 'Email already exist',
+          };
+        }
         user.email = email;
         user.verified = false;
+
+        await this.verifications.delete({ user: { id: user.id } });
         const verifications = await this.verifications.save(
           this.verifications.create({ user }),
         );
@@ -137,6 +145,7 @@ export class UsersService {
         error: '업데이트에 실패했습니다.',
       };
     } catch (error) {
+      console.log(error, 'error');
       return {
         ok: false,
         error: 'Could not update',
