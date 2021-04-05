@@ -1,12 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { IsBoolean, IsOptional, IsString, Length } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Category } from './category.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Restaurant } from './restaurant.entity';
 
 @ObjectType()
 @Entity()
-export class Restaurant extends CoreEntity {
+export class Category extends CoreEntity {
   @Field((type) => String)
   @Column()
   @IsString()
@@ -18,14 +18,9 @@ export class Restaurant extends CoreEntity {
   @IsString()
   coverImage: string;
 
-  @Field((type) => String, { nullable: true })
-  @Column({ nullable: true })
-  @IsOptional()
-  @IsString()
-  address: string;
-
-  @Field((type) => Category)
-  @ManyToOne((type) => Category, (category) => category.restaurants)
-  category: Category;
+  @Field((type) => [Restaurant])
+  @OneToMany((type) => Restaurant, (restaurant) => restaurant.category)
+  restaurants: Restaurant[];
 }
+
 //클래스 하나로 graphQL 스키마와 DB에 저장되는 실제 데이터 형식을 만들 수 있다.
