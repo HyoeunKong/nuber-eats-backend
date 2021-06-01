@@ -19,6 +19,7 @@ export class Category extends CoreEntity {
   @IsString()
   coverImage: string;
 
+  //하나의 카테고리는 여러개의 레스토랑을 가진다.
   @Field((type) => [Restaurant])
   @OneToMany((type) => Restaurant, (restaurant) => restaurant.category)
   restaurants: Restaurant[];
