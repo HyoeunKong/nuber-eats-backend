@@ -34,7 +34,9 @@ export class Restaurant extends CoreEntity {
   category: Category;
 
   @Field((type) => User)
-  @ManyToOne((type) => User, (user) => user.restaurants)
+  @ManyToOne((type) => User, (user) => user.restaurants, {
+    onDelete: 'CASCADE',
+  })
   owner: User;
 }
 //클래스 하나로 graphQL 스키마와 DB에 저장되는 실제 데이터 형식을 만들 수 있다.
