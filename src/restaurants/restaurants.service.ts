@@ -72,6 +72,7 @@ export class RestaurantService {
           error: 'Restaurant not found',
         };
       }
+
       if (owner.id !== restaurant.ownerId) {
         return {
           ok: false,
