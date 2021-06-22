@@ -5,6 +5,7 @@ import { EditProfileOutput } from 'src/users/dtos/edit-profile.dto';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { AllCategoriesOutput } from './dtos/all-categories.dto';
+import { CategoryInput, CategoryOuput } from './dtos/category.dto';
 import {
   CreateRestaurantInput,
   CreateRestaurantOutput,
@@ -101,7 +102,6 @@ export class RestaurantService {
     owner: User,
     { restaurantId }: DeleteRestaurantInput,
   ): Promise<DeleteRestaurantOutput> {
-    console.log({ restaurantId });
     const restaurant = await this.restaurants.findOne(restaurantId);
     try {
       if (!restaurant) {
@@ -147,5 +147,29 @@ export class RestaurantService {
 
   countRestaurants(category: Category) {
     return this.restaurants.count({ category });
+  }
+
+  async fingCategoryBySlug({ slug }: CategoryInput): Promise<CategoryOuput> {
+    try {
+      const category = await this.categories.findOne(
+        { slug },
+        { relations: ['restaurants'] },
+      );
+      if (!category) {
+        return {
+          ok: false,
+          error: 'Category not found',
+        };
+      }
+      return {
+        ok: true,
+        category,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: 'Could not load category',
+      };
+    }
   }
 }
