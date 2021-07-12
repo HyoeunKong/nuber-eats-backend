@@ -14,7 +14,7 @@ export class OrderResolver {
   @Role(['Client'])
   async createOrder(
     @AuthUser() customer: User,
-    @Args('inpue')
+    @Args('input')
     createOrderInput: CreateOrderInput,
   ): Promise<CreateOrderOutput> {
     return this.ordersService.createOrder(customer, createOrderInput);

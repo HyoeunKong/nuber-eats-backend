@@ -8,10 +8,11 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 @ObjectType()
 @Entity()
 export class OrderItem extends CoreEntity {
-  @Field((type) => [DishOption], { nullable: true })
+  @Field((type) => Dish)
   @ManyToOne((type) => Dish, { nullable: true, onDelete: 'CASCADE' })
   dish?: Dish;
 
+  @Field((type) => [DishOption], { nullable: true })
   @Column({ type: 'json', nullable: true })
   options?: DishOption[];
 }
