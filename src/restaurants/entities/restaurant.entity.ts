@@ -33,14 +33,14 @@ export class Restaurant extends CoreEntity {
   @Column({ nullable: true })
   @IsOptional()
   @IsString()
-  address: string;
+  address?: string;
 
   @Field((type) => Category, { nullable: true }) // nullble true 인이유: category 지울 때 restaurant 지우면 안됨
   @ManyToOne((type) => Category, (category) => category.restaurants, {
     nullable: true,
     onDelete: 'SET NULL',
   })
-  category: Category;
+  category?: Category;
 
   @Field((type) => User)
   @ManyToOne((type) => User, (user) => user.restaurants, {

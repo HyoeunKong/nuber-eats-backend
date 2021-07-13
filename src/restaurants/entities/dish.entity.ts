@@ -49,6 +49,10 @@ export class Dish extends CoreEntity {
   @Length(5, 140)
   description: string;
 
+  @Field((type) => [DishOption], { nullable: true })
+  @Column({ type: 'json', nullable: true })
+  options?: DishOption[];
+
   @Field((type) => Restaurant, { nullable: true })
   @ManyToOne((type) => Restaurant, (restaurant) => restaurant.menu, {
     onDelete: 'CASCADE',
@@ -57,8 +61,4 @@ export class Dish extends CoreEntity {
 
   @RelationId((dish: Dish) => dish.restaurant)
   restaurantId: number;
-
-  @Field((type) => [DishOption], { nullable: true })
-  @Column({ type: 'json', nullable: true })
-  options?: DishOption[];
 }
